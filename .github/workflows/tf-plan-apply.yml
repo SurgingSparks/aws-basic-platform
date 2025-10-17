@@ -13,12 +13,20 @@ permissions:
 
 jobs:
   plan:
+    permissions:
+          id-token: write
+          contents: read        
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: envs/dev/network
     steps:
       - uses: actions/checkout@v4
+
+      - name: Debug refs
+        run: |
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_REF=$GITHUB_REF"
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -42,14 +50,21 @@ jobs:
           path: envs/dev/network/tfplan
 
   apply:
+    permissions:
+          id-token: write
+          contents: read  
     needs: plan
     runs-on: ubuntu-latest
-    environment: dev   # <-- requires approval in GitHub UI
     defaults:
       run:
         working-directory: envs/dev/network
     steps:
       - uses: actions/checkout@v4
+
+      - name: Debug refs
+        run: |
+          echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+          echo "GITHUB_REF=$GITHUB_REF"
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
