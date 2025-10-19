@@ -1,4 +1,4 @@
-name: tf-dev-network
+name: tf-dev-network-plan
 
 on:
   workflow_dispatch:
