@@ -48,15 +48,27 @@ resource "aws_route_table" "public" {
   }
 }
 
-# ------------- route to internet -------------
+# ------------- public route to internet -------------
 resource "aws_route" "public_inet" {
   route_table_id         = aws_route_table.public.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-# ------------- Link route to public subnet -------------
+# ------------- Link public route to public subnet -------------
 resource "aws_route_table_association" "pub_assoc" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
+}
+# ------------- Private route -------------
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = local.names.rt_private
+  }
+}
+# ------------- Link private route to private subnet -------------
+resource "aws_route_table_association" "priv_assoc" {
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.private.id
 }
