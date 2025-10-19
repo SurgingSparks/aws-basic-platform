@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "tf-state-testing-2025"
-    key            = "envs/dev/network/terraform.tfstate"
+    key            = "envs/dev01/network/terraform.tfstate"
     region         = "ap-southeast-2"
     dynamodb_table = "tf-state-locks"
     encrypt        = true
