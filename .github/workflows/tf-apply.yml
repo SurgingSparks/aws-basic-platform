@@ -1,4 +1,4 @@
-name: tf-dev-network-apply
+name: tf-apply-dev-network
 
 on:
   workflow_dispatch:
@@ -29,6 +29,6 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-        
+
       - name: Terraform Apply (approved)
         run: terraform apply -auto-approve tfplan
