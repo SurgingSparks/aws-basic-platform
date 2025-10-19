@@ -1,0 +1,79 @@
+name: tf-dev01
+
+on:
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: "Target stack"
+        required: true
+        type: choice
+        options: [network, app]
+        default: network
+      action:
+        description: "plan | apply | destroy"
+        required: true
+        type: choice
+        options: [plan, apply, destroy]
+        default: plan
+      confirm_destroy:
+        description: "For destroy: type EXACTLY 'destroy dev01 ${stack}'"
+        required: false
+        default: ""
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-southeast-2
+  WORKDIR: envs/dev01/${{ github.event.inputs.stack }}
+
+jobs:
+  plan_or_apply:
+    if: ${{ inputs.action == 'plan' || inputs.action == 'apply' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::817041139478:role/GitAdmin
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform -chdir=${{ env.WORKDIR }} init -upgrade
+
+      - name: Terraform Plan
+        run: terraform -chdir=${{ env.WORKDIR }} plan
+
+      - name: Terraform Apply
+        if: ${{ inputs.action == 'apply' }}
+        run: terraform -chdir=${{ env.WORKDIR }} apply -auto-approve
+
+  destroy:
+    if: ${{ inputs.action == 'destroy' && inputs.confirm_destroy == format('destroy dev01 {0}', inputs.stack) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::817041139478:role/GitAdmin
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (same backend)
+        run: terraform -chdir=${{ env.WORKDIR }} init -upgrade
+
+      - name: Preview Destroy
+        run: terraform -chdir=${{ env.WORKDIR }} plan -destroy
+
+      - name: Terraform Destroy
+        run: terraform -chdir=${{ env.WORKDIR }} destroy -auto-approve
