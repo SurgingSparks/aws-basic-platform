@@ -7,5 +7,10 @@ locals {
     vpc           = "${local.name_prefix}-vpc"
     subnet_public = "${local.name_prefix}-subnet-public"
     subnet_priv   = "${local.name_prefix}-subnet-private"
+    igw           = "${local.name_prefix}-igw"
+    rt_public     = "${local.name_prefix}-rt-public"
+    nat_eip       = "${local.name_prefix}-nat-eip"
+    nat_gw        = "${local.name_prefix}-nat"
+    rt_private    = "${local.name_prefix}-rt-private"
   }
 }

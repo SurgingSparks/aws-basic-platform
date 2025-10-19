@@ -32,3 +32,31 @@ resource "aws_subnet" "private" {
     Tier = "private"
   }
 }
+# ---------------- Internet Gateway ----------------
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = local.names.igw
+  }
+}
+
+# ------------- Public Route Table (+ default route) -------------
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name = local.names.rt_public
+  }
+}
+
+# ------------- route to internet -------------
+resource "aws_route" "public_inet" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
+# ------------- Link route to public subnet -------------
+resource "aws_route_table_association" "pub_assoc" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}

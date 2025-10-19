@@ -13,3 +13,12 @@ output "private_subnet_id" {
 output "name_prefix" {
   value = local.name_prefix
 }
+
+output "igw_id" { 
+  value = aws_internet_gateway.igw.id 
+}
+
+output "public_rt_id" { 
+  value = aws_route_table.public.id
+}
+
