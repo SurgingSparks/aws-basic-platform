@@ -33,7 +33,7 @@ resource "aws_instance" "srv01" {
     delete_on_termination = true
   }
   tags = { Name = local.names.srv01 }
-  
+
 # ---- cloud-init on startup ----
   user_data = <<-EOF
               user_data = <<'EOF'
@@ -46,7 +46,7 @@ resource "aws_instance" "srv01" {
               for i in {1..30}; do
                 DATA_DEV=$(lsblk -ndo NAME,TYPE | awk '$2=="disk"{print "/dev/"$1}' | grep -v nvme0n1 | head -n1 || true)
                 [ -n "$DATA_DEV" ] && break
-                sleep 2
+                sleep 10
               done
               [ -z "$DATA_DEV" ] && exit 0
 
