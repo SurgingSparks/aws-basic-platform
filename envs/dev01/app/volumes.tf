@@ -1,0 +1,20 @@
+# ---- srv01 volume ----
+resource "aws_ebs_volume" "app_data" {
+  availability_zone = aws_instance.srv01.availability_zone
+  size              = var.data_volume_size_gib
+  type              = var.data_volume_type
+  encrypted         = true
+  kms_key_id        = var.kms_key_id
+
+  tags = {
+    Name   = local.names.vol_app
+    Role   = "app-data"
+  }
+}
+
+resource "aws_volume_attachment" "app_data_attach" {
+  device_name           = "/dev/sdf"                    # will appear as /dev/nvme1n1 on Nitro
+  volume_id             = aws_ebs_volume.app_data.id
+  instance_id           = aws_instance.srv01.id
+  stop_instance_before_detaching = false
+}

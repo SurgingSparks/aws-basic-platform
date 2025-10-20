@@ -51,3 +51,16 @@ variable "ami_id" {
   type        = string
   default     = "ami-075924b436aa32cd4"
 }
+# --------------- storage settings ---------------
+variable "data_volume_size_gib" { 
+  type = number 
+  default = 10 
+}   
+variable "data_volume_type"     { 
+  type = string  
+  default = "gp3" 
+}
+variable "kms_key_id"           { 
+  type = string  
+  default = null 
+} 

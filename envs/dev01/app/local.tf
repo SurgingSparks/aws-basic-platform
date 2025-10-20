@@ -2,7 +2,8 @@ locals {
   name_prefix = "${var.project}-${var.environment}"
 
   names = {
+    vol_app       = "${local.name_prefix}-vol-serv01"
     sg_public_ssh = "${local.name_prefix}-sg-public-ssh"
-    ec2_public    = "${local.name_prefix}-ec2-public-test"
+    srv01    = "${local.name_prefix}-srv01"
   }
 }
