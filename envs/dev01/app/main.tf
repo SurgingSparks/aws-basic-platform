@@ -39,29 +39,8 @@ resource "aws_instance" "srv01" {
               user_data = <<'EOF'
               #!/bin/bash
               set -euxo pipefail
-
-              dnf -y install xfsprogs
-
-              # Wait for the non-root NVMe disk (root is nvme0n1)
-              for i in {1..30}; do
-                DATA_DEV=$(lsblk -ndo NAME,TYPE | awk '$2=="disk"{print "/dev/"$1}' | grep -v nvme0n1 | head -n1 || true)
-                [ -n "$DATA_DEV" ] && break
-                sleep 10
-              done
-              [ -z "$DATA_DEV" ] && exit 0
-
-              # Make filesystem if none exists (idempotent)
-              if ! blkid "$DATA_DEV" >/dev/null 2>&1; then
-                mkfs.xfs -f "$DATA_DEV" -L appdata
-              fi
-
-              mkdir -p /app
-              # Persist by UUID so it survives reattach/rename
-              UUID=$(blkid -s UUID -o value "$DATA_DEV")
-              grep -q "$UUID" /etc/fstab || echo "UUID=$UUID /app xfs defaults,nofail 0 2" >> /etc/fstab
-
-              mount -a
-              echo "stage2 ok" > /app/keepme.txt
+              dnf -y update
+              dnf -y install curl
+              echo "Hello from $(hostname) in ${var.environment}" > /etc/motd
               EOF
-
 }
