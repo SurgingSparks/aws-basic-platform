@@ -29,14 +29,12 @@ resource "aws_instance" "srv01" {
   subnet_id              = local.dev01_public_subnet_id
   vpc_security_group_ids = [aws_security_group.public_ssh.id]
   key_name               = var.ssh_key_name
-
-  # keep root minimal & auto-clean
   root_block_device {
     delete_on_termination = true
   }
-
   tags = { Name = local.names.srv01 }
-
+  
+# ---- cloud-init on startup ----
   user_data = <<-EOF
               user_data = <<'EOF'
               #!/bin/bash
