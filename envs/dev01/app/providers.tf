@@ -34,6 +34,7 @@ data "terraform_remote_state" "network" {
 }
 
 locals {
-  dev01_vpc_id           = data.terraform_remote_state.network.outputs.vpc_id
-  dev01_public_subnet_id = data.terraform_remote_state.network.outputs.public_subnet_id
+  dev01_vpc_id            = data.terraform_remote_state.network.outputs.vpc_id
+  dev01_public_subnet_id  = data.terraform_remote_state.network.outputs.public_subnet_id
+  dev01_private_subnet_id = data.terraform_remote_state.network.outputs.private_subnet_id
 }

@@ -29,26 +29,49 @@ resource "aws_instance" "srv01" {
   subnet_id              = local.dev01_public_subnet_id
   vpc_security_group_ids = [aws_security_group.public_ssh.id]
   key_name               = var.ssh_key_name
+
   root_block_device {
     delete_on_termination = true
   }
-  tags = { Name = local.names.srv01 }
 
-# ---- cloud-init on startup ----
   user_data = <<-EOF
-              user_data = <<'EOF'
               #!/bin/bash
               set -euxo pipefail
               dnf -y update
               dnf -y install curl
               echo "Hello from $(hostname) in ${var.environment}" > /etc/motd
               EOF
+
+  tags = { Name = local.names.srv01 }
 }
 
-# --------------- Vault ---------------=
+# ---- EC2 instance in the PRIVATE subnet ----
+resource "aws_instance" "srv02" {
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  subnet_id              = local.dev01_private_subnet_id
+  vpc_security_group_ids = [aws_security_group.public_ssh.id]
+  key_name               = var.ssh_key_name
+
+  root_block_device {
+    delete_on_termination = true
+  }
+
+  user_data = <<-EOF
+              #!/bin/bash
+              set -euxo pipefail
+              dnf -y update
+              dnf -y install curl
+              echo "Hello from $(hostname) in ${var.environment}" > /etc/motd
+              EOF
+
+  tags = { Name = local.names.srv02 }
+}
+
+# --------------- Vault ---------------
 resource "aws_backup_vault" "dev01vault" {
   name          = local.names.backup_vault
-  force_destroy = var.backup_vault_force_destroy  
+  force_destroy = var.backup_vault_force_destroy
 
   tags = {
     Name        = local.names.backup_vault
