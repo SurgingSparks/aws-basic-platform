@@ -32,6 +32,7 @@ resource "aws_subnet" "private" {
     Tier = "private"
   }
 }
+
 # ---------------- Internet Gateway ----------------
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
