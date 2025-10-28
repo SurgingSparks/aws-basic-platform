@@ -5,5 +5,6 @@ locals {
     vol_app       = "${local.name_prefix}-vol-serv01"
     sg_public_ssh = "${local.name_prefix}-sg-public-ssh"
     srv01    = "${local.name_prefix}-srv01"
+    backup_vault = "${local.name_prefix}-backup-vault"
   }
 }

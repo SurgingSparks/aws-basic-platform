@@ -44,3 +44,14 @@ resource "aws_instance" "srv01" {
               echo "Hello from $(hostname) in ${var.environment}" > /etc/motd
               EOF
 }
+
+# --------------- Vault ---------------=
+resource "aws_backup_vault" "this" {
+  name          = local.names.backup_vault
+  force_destroy = var.backup_vault_force_destroy  
+
+  tags = {
+    Name        = local.names.backup_vault
+    Environment = var.environment
+  }
+}

@@ -64,3 +64,10 @@ variable "kms_key_id"           {
   type = string  
   default = null 
 } 
+# --------------- Vault ---------------
+variable "backup_vault_force_destroy" {
+  description = "Allow destroying the vault even if it contains recovery points (DEV ONLY!)."
+  type        = bool
+  default     = true
+}
+
