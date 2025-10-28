@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/aws"
       version = ">= 5.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.5"
+    }
   }
 }
 
@@ -33,8 +37,13 @@ data "terraform_remote_state" "network" {
   }
 }
 
-locals {
-  dev01_vpc_id            = data.terraform_remote_state.network.outputs.vpc_id
-  dev01_public_subnet_id  = data.terraform_remote_state.network.outputs.public_subnet_id
-  dev01_private_subnet_id = data.terraform_remote_state.network.outputs.private_subnet_id
+data "aws_vpc" "main" {
+  id = data.terraform_remote_state.network.outputs.vpc_id
 }
+
+locals {
+  dev01_vpc_id             = data.terraform_remote_state.network.outputs.vpc_id
+  dev01_private_subnet_id  = data.terraform_remote_state.network.outputs.private_subnet_id
+  dev01_vpc_cidr           = data.aws_vpc.main.cidr_block
+}
+
