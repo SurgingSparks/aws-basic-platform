@@ -13,7 +13,7 @@ resource "aws_ebs_volume" "app_data_srv01" {
 }
 
 resource "aws_volume_attachment" "app_data_srv01_attach" {
-  device_name                  = "/dev/sdf"                    # will appear as /dev/nvme1n1 on Nitro
+  device_name                  = "/dev/sdf"                    
   volume_id                    = aws_ebs_volume.app_data_srv01.id
   instance_id                  = aws_instance.srv01.id
   stop_instance_before_detaching = false
@@ -34,7 +34,7 @@ resource "aws_ebs_volume" "app_data_srv02" {
 }
 
 resource "aws_volume_attachment" "app_data_srv02_attach" {
-  device_name                  = "/dev/sdf"                    # will appear as /dev/nvme1n1 on Nitro
+  device_name                  = "/dev/sdf"                   
   volume_id                    = aws_ebs_volume.app_data_srv02.id
   instance_id                  = aws_instance.srv02.id
   stop_instance_before_detaching = false
