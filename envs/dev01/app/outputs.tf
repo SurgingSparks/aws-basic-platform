@@ -5,8 +5,8 @@ output "srv01_instance_id" {
   value = aws_instance.srv01.id
 }
 output "backup_vault_name" { 
-  value = aws_backup_vault.this.name 
+  value = aws_backup_vault.dev01vault.name 
 }
 output "backup_vault_arn"  { 
-  value = aws_backup_vault.this.arn 
+  value = aws_backup_vault.dev01vault.arn 
 }
