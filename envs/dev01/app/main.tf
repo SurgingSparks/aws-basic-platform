@@ -46,7 +46,7 @@ resource "aws_instance" "srv01" {
 }
 
 # --------------- Vault ---------------=
-resource "aws_backup_vault" "this" {
+resource "aws_backup_vault" "dev01vault" {
   name          = local.names.backup_vault
   force_destroy = var.backup_vault_force_destroy  
 
