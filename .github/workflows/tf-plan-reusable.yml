@@ -7,7 +7,7 @@ on:
         description: "Target stack"
         required: true
         type: choice
-        options: [network, app]
+        options: [network, app, db]
         default: network
       action:
         description: "plan | apply | destroy"
