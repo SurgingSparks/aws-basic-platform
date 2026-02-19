@@ -37,7 +37,7 @@ variable "instance_type" {
 variable "ssh_key_name" {
   description = "Existing EC2 key pair name"
   type        = string
-  default     = "general-server-key"
+  default     = "ssh-key2"
 }
 
 variable "my_ip_cidr" {
