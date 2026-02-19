@@ -43,7 +43,7 @@ variable "ssh_key_name" {
 variable "my_ip_cidr" {
   description = "Your public IP in CIDR form for SSH"
   type        = string
-  default     = "115.70.50.57/32"
+  default     = "115.70.50.153/32"
 }
 
 variable "ami_id" {
